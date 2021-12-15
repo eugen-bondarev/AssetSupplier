@@ -17,6 +17,36 @@ public:
 		memcpy(entry, original.entry, sizeInBytes);
 	}
 
+	void __Set(const std::vector<const Field*>& fields)
+	{
+		size_t offset{ 0 };
+		for (size_t i = 0; i < fields.size(); ++i)
+		{
+			SetData(*fields[i], fields[i]->GetSizeInBytes(), offset);
+			offset += fields[i]->GetSizeInBytes();
+		}
+	}
+
+	void _Set(size_t& offset, const Field& field)
+	{
+		SetData(field, field.GetSizeInBytes(), offset);
+		offset += field.GetSizeInBytes();
+	}
+
+	template <typename First, typename Second, typename... Rest>
+	void _Set(size_t& offset, First&& first, Second&& second, Rest&&... rest)
+	{
+		_Set(offset, std::forward<First>(first));
+		_Set(offset, std::forward<Second>(second), std::forward<Rest>(rest)...);
+	}
+
+	template <typename... Params>
+	void Set(Params&&... params)
+	{
+		size_t offset{ 0 };
+		_Set(offset, std::forward<Params>(params)...);
+	}
+
 	Field& operator=(const Field& original)
 	{
 		entry = new char[sizeInBytes];
@@ -109,8 +139,15 @@ int main()
 	indicesField.SetData(indices.data());
 
 	Field asset(verticesField.GetSizeInBytes() + indicesField.GetSizeInBytes());
-	asset.SetData(verticesField, verticesField.GetSizeInBytes(), 0);
-	asset.SetData(indicesField, indicesField.GetSizeInBytes(), verticesField.GetSizeInBytes());
+
+	asset.__Set({
+		&verticesField,
+		&indicesField,
+	});
+	//asset.Set(
+	//	verticesField,
+	//	indicesField
+	//);
 
 	for (size_t i = 0; i < 10; ++i)
 	{
