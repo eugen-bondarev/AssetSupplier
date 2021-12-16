@@ -1,51 +1,77 @@
-#include "DataContainer.h"
 #include "Common.h"
-#include "Field.h"
 
-struct Vec2 { float x{ 0.0f }, y{ 0.0f }; };
-struct Vec3 { float x{ 0.0f }, y{ 0.0f }, z{ 0.0f }; };
-
-struct Vertex3D
+class Serializable
 {
-	Vec3 position{0.0f, 1.0f, 2.0f};
-	Vec2 uv{ 3.0f, 4.0f };
-	Vec3 normal{ 5.0f, 6.0f, 7.0f };
+public:
+	Serializable(const size_t sizeInBytes)
+	{
+		data = new char[sizeInBytes];
+	}
+
+	template <typename T>
+	Serializable(const std::vector<T>& vector)
+	{
+		const size_t entrySize{ sizeof(T) };
+		const size_t numEntries{ vector.size() };
+		const size_t contentSize{ entrySize * numEntries };
+		const size_t sizeInBytes{ sizeof(entrySize) + sizeof(numEntries) + contentSize };
+
+		data = new char[sizeInBytes];
+		size_t offset{ 0 };
+
+		memcpy(data + offset, &entrySize, sizeof(entrySize)); offset += sizeof(entrySize);
+		memcpy(data + offset, &numEntries, sizeof(numEntries)); offset += sizeof(numEntries);
+		memcpy(data + offset, vector.data(), contentSize);
+	}
+
+	size_t GetEntrySize() const
+	{
+		const size_t offset{ 0 };
+		return *reinterpret_cast<size_t*>(data + offset);
+	}
+
+	size_t GetNumEntries() const
+	{
+		const size_t offset{ sizeof(size_t) };
+		return *reinterpret_cast<size_t*>(data + offset);
+	}
+
+	template <typename T = char*>
+	T GetData()
+	{
+		return _GetData<T>();
+	}
+
+	template <typename T = char*>
+	const T GetData() const
+	{
+		return _GetData<T>();
+	}
+
+	~Serializable()
+	{
+		delete[] data;
+	}
+
+private:
+	template <typename T>
+	T _GetData()
+	{
+		const size_t offset{ sizeof(size_t) * 2 };
+		return reinterpret_cast<T>(data + offset);
+	}
+	
+	char* data;
 };
 
 int main()
 {
-	std::vector<Vertex3D> vertices(10);
-	std::vector<uint32_t> indices(10);
+	std::vector<uint32_t> vector = {1, 2, 3, 4, 5, 6};
+	Serializable serializable(vector);
 
-	for (size_t i = 0; i < indices.size(); ++i)
+	for (size_t i = 0; i < serializable.GetNumEntries(); ++i)
 	{
-		indices[i] = i;
-	}
-
-	Field verticesField(sizeof(Vertex3D) * 10);
-	Field indicesField(sizeof(uint32_t) * 10);
-	verticesField.SetData(vertices.data());
-	indicesField.SetData(indices.data());
-
-	Field asset(verticesField.GetSizeInBytes() + indicesField.GetSizeInBytes());
-
-	asset.SetData({
-		&verticesField,
-		&indicesField,
-	});
-
-	std::vector<Vertex3D> verticesVector = asset.ToVector<Vertex3D>(10);
-	for (size_t i = 0; i < 10; ++i)
-	{
-		Vertex3D& vertex = verticesVector[i];
-		std::cout << vertex.position.x << ' ' << vertex.position.y << ' ' << vertex.position.z << '\n';
-		std::cout << vertex.uv.x << ' ' << vertex.uv.y << '\n';
-		std::cout << vertex.normal.x << ' ' << vertex.normal.y << ' ' << vertex.normal.z << '\n';
-	}
-
-	std::vector<uint32_t> indicesVector = asset.ToVector<uint32_t>(10, 10 * sizeof(Vertex3D));
-	for (size_t i = 0; i < 10; ++i)
-	{
-		std::cout << indicesVector[i] << '\n';
+		uint32_t& num = serializable.GetData<uint32_t*>()[i];
+		VAR_OUT(num);
 	}
 }
