@@ -1,77 +1,64 @@
 #include "Common.h"
 
-class Serializable
+// AssetManager = 
+//		data0.asu, data1.asu, dataN.asu
+// +
+//		descriptor
+//		Entry example:
+// 
+//		Assets/Models/Humanoid/Orc.fbx 5000000
+//		GetLocation() const : string = "Assets/Models/Humanoid"
+//		GetExtension() const: string = "fbx" -> Helps us find the corresponding importer
+//		GetSize() const : size_t = 5000000
+
+#include <filesystem>
+
+#include <spdlog/spdlog.h>
+// spdlog::set_pattern("%^%v%$"); // spdlog::set_pattern("[%^%l%$] %v");
+
+#define ASU_LOG(...) spdlog::info(__VA_ARGS__)
+#define ASU_WARN(...) spdlog::warn(__VA_ARGS__)
+#define ASU_ERR(...) spdlog::error(__VA_ARGS__)
+
+namespace Asu
 {
-public:
-	Serializable(const size_t sizeInBytes)
+	void ReplaceAll(std::string& string, const std::string& x, const std::string& y)
 	{
-		data = new char[sizeInBytes];
+		size_t pos;
+		while ((pos = string.find(x)) != std::string::npos) 
+		{
+			string.replace(pos, 1, y);
+		}
 	}
 
-	template <typename T>
-	Serializable(const std::vector<T>& vector)
+	void PackFile(const std::string& rootDir, std::string& path)
 	{
-		const size_t entrySize{ sizeof(T) };
-		const size_t numEntries{ vector.size() };
-		const size_t contentSize{ entrySize * numEntries };
-		const size_t sizeInBytes{ sizeof(entrySize) + sizeof(numEntries) + contentSize };
-
-		data = new char[sizeInBytes];
-		size_t offset{ 0 };
-
-		memcpy(data + offset, &entrySize, sizeof(entrySize)); offset += sizeof(entrySize);
-		memcpy(data + offset, &numEntries, sizeof(numEntries)); offset += sizeof(numEntries);
-		memcpy(data + offset, vector.data(), contentSize);
+		ReplaceAll(path, "\\", "/");
+		ASU_LOG("Processing path {0}", path);
 	}
 
-	size_t GetEntrySize() const
+	void Pack(const std::string& rootDir)
 	{
-		const size_t offset{ 0 };
-		return *reinterpret_cast<size_t*>(data + offset);
-	}
+		namespace fs = std::filesystem;
 
-	size_t GetNumEntries() const
-	{
-		const size_t offset{ sizeof(size_t) };
-		return *reinterpret_cast<size_t*>(data + offset);
-	}
+		for (const auto& entry : fs::recursive_directory_iterator(rootDir))
+		{
+			if (entry.is_directory())
+			{
 
-	template <typename T = char*>
-	T GetData()
-	{
-		return _GetData<T>();
+			}
+			else
+			{
+				PackFile(rootDir, entry.path().string());
+			}
+		}
 	}
-
-	template <typename T = char*>
-	const T GetData() const
-	{
-		return _GetData<T>();
-	}
-
-	~Serializable()
-	{
-		delete[] data;
-	}
-
-private:
-	template <typename T>
-	T _GetData()
-	{
-		const size_t offset{ sizeof(size_t) * 2 };
-		return reinterpret_cast<T>(data + offset);
-	}
-	
-	char* data;
-};
+}
 
 int main()
 {
-	std::vector<uint32_t> vector = {1, 2, 3, 4, 5, 6};
-	Serializable serializable(vector);
+	spdlog::set_pattern("[%^%l%$] %v");
+	Asu::Pack("C:/Users/azare/Documents/Dev/Cpp/AssetSupplier/assets");
 
-	for (size_t i = 0; i < serializable.GetNumEntries(); ++i)
-	{
-		uint32_t& num = serializable.GetData<uint32_t*>()[i];
-		VAR_OUT(num);
-	}
+	return 0;
 }
