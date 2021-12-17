@@ -1,14 +1,21 @@
 #pragma once
 
-
-#include <iostream>
-#define LOG_OUT(x) std::cout << x << std::endl
-#define LOG_OUT_INLINE(x) std::cout << x
-#define VAR_OUT(x) LOG_OUT(#x << " = " << x)
-
-
 #include <assert.h>
-#define ASSERT(x) assert(x)
+#define ASU_ASSERT(x) assert(x)
+
+#include <spdlog/spdlog.h>
+#define ASU_INFO(...) spdlog::info(__VA_ARGS__)
+#define ASU_WARN(...) spdlog::warn(__VA_ARGS__)
+#define ASU_ERR(...) spdlog::error(__VA_ARGS__)
 
 #include <vector>
 #include <string>
+#include <map>
+
+namespace Asu
+{
+	template <typename T>
+	using Vec = std::vector<T>;
+	
+	using String = std::string;
+}
