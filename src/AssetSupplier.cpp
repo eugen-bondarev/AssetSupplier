@@ -14,6 +14,11 @@ namespace Asu
 		{
 			EntryTableFromFile(table, root + "/table.asu");
 		}
+
+		if (flags & AssetSupplierFlags_Watch)
+		{
+
+		}
 	}
 
 	void AssetSupplier::Load(Asset& asset, const String& location)

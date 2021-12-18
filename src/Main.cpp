@@ -7,7 +7,7 @@ int main()
 
 	const Asu::String root{ "C:/Users/azare/Documents/Dev/Cpp/AssetSupplier/assets" };
 
-	Asu::AssetSupplier assetSupplier{ root, Asu::AssetSupplierFlags_Create };
+	Asu::AssetSupplier assetSupplier{ root, Asu::AssetSupplierFlags_None };
 
 	Asu::Asset asset;
 	assetSupplier.Load(asset, "foo/foo/MyFavoriteFile.file");

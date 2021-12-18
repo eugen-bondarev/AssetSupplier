@@ -13,6 +13,7 @@ namespace Asu
 	{
 		AssetSupplierFlags_None   = 1 << 0,
 		AssetSupplierFlags_Create = 1 << 1,
+		AssetSupplierFlags_Watch  = 1 << 2,
 	};
 
 	class AssetSupplier
