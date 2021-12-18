@@ -1,4 +1,5 @@
 #include "AssetSupplier.h"
+#include "Test/Model.h"
 #include "Package.h"
 
 int main()
@@ -10,16 +11,21 @@ int main()
 	Asu::AssetSupplier assetSupplier{ root, Asu::AssetSupplierFlags_None };
 
 	Asu::Asset asset;
-	assetSupplier.Load(asset, "foo/foo/MyFavoriteFile.file");
+	assetSupplier.Load(asset, "CharacterModel.fbx");
 
-	ASU_INFO(asset.data.size());
+	Model model(asset);
 
-	Asu::String data;
-	for (size_t i = 0; i < asset.data.size(); ++i)
-	{
-		data += asset.data[i];
-	}
-	ASU_INFO(data);
+	ASU_VAR(model.vertices.size());
+	ASU_VAR(model.indices.size());
+
+	//ASU_INFO(asset.data.size());
+
+	//Asu::String data;
+	//for (size_t i = 0; i < asset.data.size(); ++i)
+	//{
+	//	data += asset.data[i];
+	//}
+	//ASU_INFO(data);
 
 	return 0;
 }
