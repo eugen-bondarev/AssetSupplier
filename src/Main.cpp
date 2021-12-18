@@ -16,5 +16,17 @@ int main()
 	spdlog::set_pattern("[%^%l%$] %v");
 	Asu::Package package("C:/Users/azare/Documents/Dev/Cpp/AssetSupplier/assets");
 
+	Asu::Asset asset;
+	Asu::LoadAsset(asset, "C:/Users/azare/Documents/Dev/Cpp/AssetSupplier/assets/data.asu", package.GetEntry(2));
+
+	ASU_INFO(asset.data.size());
+
+	Asu::String data;
+	for (size_t i = 0; i < asset.data.size(); ++i)
+	{
+		data += asset.data[i];
+	}
+	ASU_INFO(data);
+
 	return 0;
 }

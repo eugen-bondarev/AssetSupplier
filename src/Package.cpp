@@ -19,20 +19,31 @@ namespace Asu
 			}
 		}
 		SerializeEntryTable(rootDir + "/table.asu", entryTable);
+		Archive(rootDir + "/data.asu", rootDir, entryTable);
 	}
 
 	void Package::ProcessFile(String& fullPath, size_t& offset)
 	{
 		Util::ReplaceAll(fullPath, "\\", "/");
+
 		const String localPath{ fullPath.substr(rootDir.size() + 1, fullPath.size() - rootDir.size()) };
 		const size_t size{ Util::GetFileSize(fullPath) };
-		if (size != 0)
+
+		const Entry entry{ localPath, size, offset };
+
+		if (entry.GetSize() != 0 && entry.GetExtension() != "asu")
 		{
-			entryTable.emplace_back(localPath, size, offset);
+			entryTable.push_back(entry);
+			offset += size;
 		}
 		else
 		{
-			ASU_WARN("Skipped file: {0}", localPath);
+			ASU_WARN("Skipping file: {0}", localPath);
 		}
+	}
+
+	const Entry& Package::GetEntry(const size_t i) const
+	{
+		return entryTable[i];
 	}
 }

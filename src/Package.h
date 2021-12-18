@@ -10,6 +10,8 @@ namespace Asu
 	public:
 		Package(const String& rootDir);
 
+		const Entry& GetEntry(const size_t i) const;
+
 	private:
 		void ProcessFile(String& path, size_t& offset);
 
