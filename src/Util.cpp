@@ -19,6 +19,13 @@ namespace Asu
 			return result;
 		}
 
+		String GetExtension(const String& fileName)
+		{
+			const size_t lastDot{ fileName.find_last_of(".") };
+			const String extension{ fileName.substr(lastDot + 1, fileName.size() - lastDot) };
+			return extension;
+		}
+
 		size_t GetFileSize(const String& path)
 		{
 			std::ifstream fileStream(path, std::ifstream::ate | std::ifstream::binary);

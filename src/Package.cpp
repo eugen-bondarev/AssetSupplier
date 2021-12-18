@@ -28,6 +28,36 @@ namespace Asu
 		}
 	}
 
+	static void SortAlphabetically(EntryTable& table)
+	{
+		std::sort(
+			std::begin(table),
+			std::end(table),
+			[&](const Entry& a, const Entry& b)
+			{
+				return a.GetLocation() < b.GetLocation();
+			}
+		);
+	}
+
+	static void SortAlphabeticallyCaseInsensetive(EntryTable& table)
+	{
+		std::sort(
+			std::begin(table),
+			std::end(table),
+			[](const Entry& a, const Entry& b)
+			{
+				return std::lexicographical_compare(
+					std::begin(a.GetLocation()), std::end(a.GetLocation()),
+					std::begin(b.GetLocation()), std::end(b.GetLocation()),
+					[](const char& aChar, const char& bChar) {
+						return std::tolower(aChar) < std::tolower(bChar);
+					}
+				);
+			}
+		);
+	}
+
 	void CreateEntryTable(EntryTable& table, const String& root)
 	{
 		ASU_INFO("Creating entry table: {0}", root);
@@ -44,14 +74,13 @@ namespace Asu
 			}
 		}
 
-		std::sort(
-			std::begin(table), 
-			std::end(table), 
-			[&](const Entry& a, const Entry& b) 
-			{ 
-				return a.GetLocation() < b.GetLocation();
-			}
-		);
+#ifdef ASU_SORT_ENTRY_TABLE
+#	ifdef ASU_FORCE_ALLOW_CAPITAL_CASES
+		SortAlphabeticallyCaseInsensetive(table);
+#	else
+		SortAlphabetically(table);
+#	endif
+#endif
 	}
 
 	static void LineToEntry(Entry& entry, const String& line)

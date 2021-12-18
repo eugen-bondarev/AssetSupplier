@@ -14,6 +14,7 @@ file(
 	GLOB_RECURSE
 	SOURCE_VAR
 	src/*.cpp
+	#external/FileWatcher/src/*.cpp
 )
 
 add_subdirectory(external/assimp)
@@ -26,6 +27,7 @@ target_include_directories(
 	PRIVATE 
 	external/assimp/include
 	external/spdlog/include
+	src/External/FileWatcher/include
 )
 
 target_link_libraries(

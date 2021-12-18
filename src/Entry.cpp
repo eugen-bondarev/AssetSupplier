@@ -1,6 +1,7 @@
 #include "Entry.h"
 
 #include <fstream>
+#include "Util.h"
 
 namespace Asu
 {
@@ -31,9 +32,7 @@ namespace Asu
 
 	String Entry::GetExtension() const
 	{
-		const size_t lastDot{ location.find_last_of(".") };
-		const String extension{ location.substr(lastDot + 1, location.size() - lastDot) };
-		return extension;
+		return Util::GetExtension(location);
 	}
 
 	size_t Entry::GetSize() const

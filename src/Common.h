@@ -19,4 +19,6 @@ namespace Asu
 	using Vec = std::vector<T>;
 	
 	using String = std::string;
+
+	using Flags = uint32_t;
 }

@@ -1,5 +1,9 @@
-CharacterModel.fbx 593916 0
-foo/bar/baz/foo.h 196 593916
-foo/bar/shader.vs 346 594112
-foo/foo/MyFavoriteFile.file 13 594458
-foo/shader.fs 72 594471
+foo/bar/baz/foo.h 196 0
+foo/bar/shader.vs 346 196
+foo/foo/a 10 542
+foo/foo/aa 3 552
+foo/foo/ab 2 555
+foo/foo/b 13 557
+foo/foo/without-caps 1 570
+foo/shader.fs 72 571
+Zz.fbx 593916 643
