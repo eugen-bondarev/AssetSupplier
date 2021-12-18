@@ -13,6 +13,7 @@ namespace Asu
 		{
 		}
 
+#pragma warning(disable: 26812)
 		void handleFileAction(FW::WatchID watchID, const FW::String& directory, const FW::String& fileName, FW::Action action) override
 		{
 			if (Util::GetExtension(fileName) == "asu") return;
@@ -20,6 +21,7 @@ namespace Asu
 			assetSupplier.OnFlagCreate();
 			ASU_INFO("{0}/{1}", directory, fileName);
 		}
+#pragma warning(default: 26812)
 
 	private:
 		const String& root;

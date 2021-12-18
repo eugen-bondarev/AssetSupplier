@@ -8,7 +8,7 @@ int main()
 
 	Asu::AssetSupplier assetSupplier{ root, Asu::AssetSupplierFlags_Create };
 
-	Asu::Asset asset = assetSupplier.Load("foo/foo/aa");
+	Asu::Asset asset = assetSupplier.Load("a/c/e/MyOwnShader.vert");
 
 	Asu::String str{ "" };
 	for (size_t i = 0; i < asset.data.size(); ++i)
