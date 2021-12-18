@@ -8,7 +8,12 @@ namespace Asu
 	class Entry
 	{
 	public:
-		Entry(const std::string& location, const size_t size, const size_t offset);
+		Entry() = default;
+		Entry(const String& location, const size_t size, const size_t offset);
+
+		void SetLocation(const String& location);
+		void SetSize(const size_t size);
+		void SetOffset(const size_t offset);
 
 		const String& GetLocation() const;
 		String GetExtension() const;
@@ -16,15 +21,12 @@ namespace Asu
 		size_t GetOffset() const;
 
 	private:
-		String location;
-		size_t size;
-		size_t offset;
+		String location{ "" };
+		size_t size{ 0 };
+		size_t offset{ 0 };
 	};
 
-	using EntryTable = Vec<Entry>;
-
-	void SerializeEntryTable(const String& path, const EntryTable& entryTable);
-	void Archive(const String& path, const String& pathPrefix, const EntryTable& entryTable);
+	using Entries = Vec<Entry>;
 
 	void LoadAsset(Asset& asset, const String& archivePath, const Entry& entry);
 }

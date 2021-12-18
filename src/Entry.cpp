@@ -4,9 +4,24 @@
 
 namespace Asu
 {
-	Entry::Entry(const std::string& location, const size_t size, const size_t offset) : location{ location }, size{ size }, offset{ offset }
+	Entry::Entry(const String& location, const size_t size, const size_t offset) : location{ location }, size{ size }, offset{ offset }
 	{
 		ASU_INFO("File: {0}, size: {1} b, offset: {2} b", location, size, offset);
+	}
+
+	void Entry::SetLocation(const String& location)
+	{
+		this->location = location;
+	}
+
+	void Entry::SetSize(const size_t size)
+	{
+		this->size = size;
+	}
+
+	void Entry::SetOffset(const size_t offset)
+	{
+		this->offset = offset;
 	}
 
 	const String& Entry::GetLocation() const
@@ -31,36 +46,12 @@ namespace Asu
 		return offset;
 	}
 
-	void SerializeEntryTable(const String& path, const EntryTable& entryTable)
-	{
-		std::ofstream file(path);
-
-		for (size_t i = 0; i < entryTable.size(); i++)
-		{
-			file << entryTable[i].GetLocation() << ' ' << entryTable[i].GetSize() << ' ' << entryTable[i].GetOffset() << '\n';
-		}
-	}
-
-	void Archive(const String& path, const String& pathPrefix, const EntryTable& entryTable)
-	{
-		std::ofstream output{ path, std::ios::binary };
-
-		for (size_t i = 0; i < entryTable.size(); ++i)
-		{
-			const String currentFileFullPath{ pathPrefix + "/" + entryTable[i].GetLocation() };
-			std::ifstream currentFile{ currentFileFullPath, std::ios::binary };
-			output << currentFile.rdbuf();
-		}
-	}
-
 	void LoadAsset(Asset& asset, const String& archivePath, const Entry& entry)
 	{
 		asset.data.resize(entry.GetSize());
 
-		std::ifstream dataStream{ archivePath, std::ios::binary };
-		//dataStream.seekg(entry.GetOffset());
-		dataStream.seekg(entry.GetOffset());
-		//dataStream.read(asset.data.data(), entry.GetSize());
-		dataStream.read(asset.data.data(), entry.GetSize());
+		std::ifstream inputStream{ archivePath, std::ios::binary };
+		inputStream.seekg(entry.GetOffset());
+		inputStream.read(asset.data.data(), entry.GetSize());
 	}
 }

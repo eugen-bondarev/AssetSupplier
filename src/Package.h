@@ -5,17 +5,8 @@
 
 namespace Asu
 {
-	class Package
-	{
-	public:
-		Package(const String& rootDir);
-
-		const Entry& GetEntry(const size_t i) const;
-
-	private:
-		void ProcessFile(String& path, size_t& offset);
-
-		String rootDir;
-		EntryTable entryTable;
-	};
+	void CreateEntryTable(Entries& table, const String& root);
+	void EntryTableFromFile(Entries& table, const String& path);
+	void EntryTableToFile(const String& path, const Entries& table);
+	void AssetsToFile(const String& path, const String& pathPrefix, const Entries& tables);
 }

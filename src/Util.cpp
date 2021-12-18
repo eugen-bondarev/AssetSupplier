@@ -6,13 +6,17 @@ namespace Asu
 {
 	namespace Util
 	{
-		void ReplaceAll(String& string, const String& x, const String& y)
+		String ReplaceAll(const String& string, const String& x, const String& y)
 		{
+			String result{ string };
 			size_t pos;
-			while ((pos = string.find(x)) != String::npos)
+
+			while ((pos = result.find(x)) != String::npos)
 			{
-				string.replace(pos, 1, y);
+				result.replace(pos, 1, y);
 			}
+
+			return result;
 		}
 
 		size_t GetFileSize(const String& path)
