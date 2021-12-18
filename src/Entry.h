@@ -26,7 +26,7 @@ namespace Asu
 		size_t offset{ 0 };
 	};
 
-	using Entries = Vec<Entry>;
+	using EntryTable = Vec<Entry>;
 
 	void LoadAsset(Asset& asset, const String& archivePath, const Entry& entry);
 }

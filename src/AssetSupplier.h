@@ -21,12 +21,12 @@ namespace Asu
 	public:
 		AssetSupplier(const String& root, const AssetSupplierFlags flags = AssetSupplierFlags_None);
 
-		void Load(Asset& asset, const String& location);
+		Asset Load(const String& location);
 
 	private:
 		const Entry& FindEntry(const String& location);
 
 		String root;
-		Entries table;
+		EntryTable table;
 	};
 }

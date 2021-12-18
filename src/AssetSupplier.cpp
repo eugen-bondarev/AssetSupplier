@@ -2,6 +2,14 @@
 
 namespace Asu
 {
+	struct Initializer
+	{
+		Initializer()
+		{
+			spdlog::set_pattern("[%^%l%$] %v");
+		}
+	} initializer;
+
 	AssetSupplier::AssetSupplier(const String& root, const AssetSupplierFlags flags) : root{ root }
 	{
 		if (flags & AssetSupplierFlags_Create)
@@ -21,10 +29,12 @@ namespace Asu
 		}
 	}
 
-	void AssetSupplier::Load(Asset& asset, const String& location)
+	Asset AssetSupplier::Load(const String& location)
 	{
+		Asset asset;
 		const Entry& entry{ FindEntry(location) };
 		LoadAsset(asset, root + "/data.asu", entry);
+		return asset;
 	}
 
 	const Entry& AssetSupplier::FindEntry(const String& location)

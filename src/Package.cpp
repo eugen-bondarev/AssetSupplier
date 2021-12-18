@@ -8,7 +8,7 @@
 
 namespace Asu
 {
-	static void AppendToEntryTable(Entries& table, const String& root, const String& pathWithMessySlashes, size_t& offset)
+	static void AppendToEntryTable(EntryTable& table, const String& root, const String& pathWithMessySlashes, size_t& offset)
 	{
 		const String fullPath = Util::ReplaceAll(pathWithMessySlashes, "\\", "/");
 
@@ -28,7 +28,7 @@ namespace Asu
 		}
 	}
 
-	void CreateEntryTable(Entries& table, const String& root)
+	void CreateEntryTable(EntryTable& table, const String& root)
 	{
 		ASU_INFO("Creating entry table: {0}", root);
 
@@ -69,7 +69,7 @@ namespace Asu
 		entry.SetOffset(offset);
 	}
 
-	void EntryTableFromFile(Entries& table, const String& path)
+	void EntryTableFromFile(EntryTable& table, const String& path)
 	{
 		std::ifstream inputStream{ path };
 		String line;
@@ -84,7 +84,7 @@ namespace Asu
 		}
 	}
 
-	void EntryTableToFile(const String& path, const Entries& table)
+	void EntryTableToFile(const String& path, const EntryTable& table)
 	{
 		std::ofstream outputStream{ path };
 
@@ -98,7 +98,7 @@ namespace Asu
 		}
 	}
 
-	void AssetsToFile(const String& path, const String& pathPrefix, const Entries& table)
+	void AssetsToFile(const String& path, const String& pathPrefix, const EntryTable& table)
 	{
 		std::ofstream outputStream{ path, std::ios::binary };
 
@@ -112,7 +112,7 @@ namespace Asu
 
 	void Pack(const String& rootWithMessySlashes)
 	{
-		Entries table;
+		EntryTable table;
 		const String root{ Util::ReplaceAll(rootWithMessySlashes, "\\", "/") };
 		CreateEntryTable(table, root);
 		EntryTableToFile(root + "/table.asu", table);
