@@ -12,5 +12,8 @@ namespace Asu
 
 		// Returns true if the entity wasn't loaded properly.
 		bool IsEmpty() const;
+
+		// Is not empty.
+		operator bool() const;
 	};
 }

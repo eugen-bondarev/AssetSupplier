@@ -1,6 +1,7 @@
 #include "AssetSupplier.h"
 
 #include "FileChangeListener.h"
+#include "Exception.h"
 
 namespace Asu
 {
@@ -88,6 +89,6 @@ namespace Asu
 			}
 		}
 
-		// throw
+		throw EntryNotFound(location);
 	}
 }
