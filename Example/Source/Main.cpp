@@ -2,11 +2,20 @@
 #include <SRM/Exception.h>
 #include <SRM/Logging.h>
 
+#ifndef EXAMPLE_ROOT_DIR
+#	define EXAMPLE_ROOT_DIR
+#endif
+
 int main(const int argc, const char* argv[])
 {
-	const srm::String root{ "C:/Users/azare/Documents/Dev/Cpp/SRM/Example/Assets" };
+	const srm::String root{ EXAMPLE_ROOT_DIR "/Assets" };
 
-	srm::ResourceManager resourceManager{ root, "myTableFile", "myDataFile", srm::ResourceManager::Mode::Create };
+	srm::ResourceManager resourceManager{ 
+		root, 
+		"table.asu",
+		"data.asu",
+		srm::ResourceManager::Mode::Create 
+	};
 	srm::Resource resource;
 
 	try

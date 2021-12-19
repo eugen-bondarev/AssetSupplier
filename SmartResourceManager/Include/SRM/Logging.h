@@ -44,8 +44,8 @@ namespace srm
 #define SRM_COLOR_ID_BRIGHT_CYAN     "96"
 #define SRM_COLOR_ID_BRIGHT_WHITE    "97"
 
-#define SRM_CUSTOM_COLOR_START(x) "\x1B[" x "m"
-#define SRM_CUSTOM_COLOR_END "\033[0m"
+#define SRM_CUSTOM_COLOR_START(x)    "\x1B[" x "m"
+#define SRM_CUSTOM_COLOR_END         "\033[0m"
 
 #define SRM_COLORED_STRING(x, color) SRM_CUSTOM_COLOR_START(color) x SRM_CUSTOM_COLOR_END
 

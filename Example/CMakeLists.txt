@@ -10,6 +10,8 @@ file(
 	Source/*.cpp
 )
 
+add_compile_definitions(EXAMPLE_ROOT_DIR="${PROJECT_SOURCE_DIR}")
+
 add_executable(SRM-Example ${SOURCE_VAR})
 
 target_include_directories(
