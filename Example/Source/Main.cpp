@@ -10,12 +10,7 @@ int main(const int argc, const char* argv[])
 {
 	const srm::String root{ EXAMPLE_ROOT_DIR "/Assets" };
 
-	srm::ResourceManager resourceManager{ 
-		root, 
-		"table.asu",
-		"data.asu",
-		srm::ResourceManager::Mode::Create 
-	};
+	srm::ResourceManager resourceManager{ root, "table.asu", "data.asu", srm::ResourceManager::Mode::Create };
 	srm::Resource resource;
 
 	try
