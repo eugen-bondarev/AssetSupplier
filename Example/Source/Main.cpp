@@ -4,7 +4,7 @@
 
 int main(const int argc, const char* argv[])
 {
-	const srm::String root{ "C:/Users/azare/Documents/Dev/Cpp/SRM/assets" };
+	const srm::String root{ "C:/Users/azare/Documents/Dev/Cpp/SRM/Example/Assets" };
 
 	srm::ResourceManager resourceManager{ root, "myTableFile", "myDataFile", srm::ResourceManager::Mode::Create };
 	srm::Resource resource;
