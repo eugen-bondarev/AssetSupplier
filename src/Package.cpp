@@ -8,7 +8,13 @@
 
 namespace Asu
 {
-	static void AppendToEntryTable(EntryTable& table, const String& root, const String& pathWithMessySlashes, size_t& offset)
+	static void AppendToEntryTable(
+		EntryTable& table, 
+		const String& root, 
+		const String& pathWithMessySlashes, 
+		size_t& offset, 
+		const Vec<String>& ignoreFiles
+	)
 	{
 		const String fullPath = Util::ReplaceAll(pathWithMessySlashes, "\\", "/");
 
@@ -17,7 +23,9 @@ namespace Asu
 
 		const Entry entry{ localPath, size, offset };
 
-		if (entry.GetSize() != 0 && entry.GetExtension() != "asu")
+		const bool entryIgnored{ std::find(std::begin(ignoreFiles), std::end(ignoreFiles), entry.GetLocation()) != std::end(ignoreFiles) };
+
+		if (entry.GetSize() != 0 && !entryIgnored)
 		{
 			table.push_back(entry);
 			offset += size;
@@ -58,7 +66,7 @@ namespace Asu
 		);
 	}
 
-	void CreateEntryTable(EntryTable& table, const String& root)
+	void CreateEntryTable(EntryTable& table, const String& root, const Vec<String>& ignoreFiles)
 	{
 		ASU_INFO("Creating entry table: {0}", root);
 
@@ -70,7 +78,7 @@ namespace Asu
 		{
 			if (!entry.is_directory())
 			{
-				AppendToEntryTable(table, root, entry.path().string(), offset);
+				AppendToEntryTable(table, root, entry.path().string(), offset, ignoreFiles);
 			}
 		}
 
