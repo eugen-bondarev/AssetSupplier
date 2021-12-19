@@ -1,4 +1,4 @@
-#include "AssetSupplier.h"
+#include "ResourceManager.h"
 #include "Test/Model.h"
 #include "Exception.h"
 #include "Package.h"
@@ -6,32 +6,28 @@
 
 int main(int argc, char* argv[])
 {
-	//ASU_CONSOLE_INFO(COLOR_GREEN_START "Info" COLOR_GREEN_END);
+	const srm::String root{ "C:/Users/azare/Documents/Dev/Cpp/AssetSupplier/assets" };
 
-	const Asu::String root{ "C:/Users/azare/Documents/Dev/Cpp/AssetSupplier/assets" };
-
-	Asu::AssetSupplier assetSupplier{ root, "myTableFile", "myDataFile", Asu::AssetSupplierFlags_Create };
-	Asu::Asset asset;
+	srm::ResourceManager resourceManager{ root, "myTableFile", "myDataFile", srm::ResourceManager::Mode::Create };
+	srm::Resource resource;
 
 	try
 	{
-		asset = assetSupplier.Load("a/b/ddc");
+		resource = resourceManager.Load("a/b/ddc");
 	}
-	catch (const Asu::Exception& exception)
+	catch (const srm::Exception& exception)
 	{
-		ASU_CONSOLE_OUT("[Error] %s", exception.what());
+		SRM_CONSOLE_OUT("[Error] %s", exception.what());
 	}
 
-	if (asset)
+	if (resource)
 	{
-		Asu::String str{ "" };
-		for (size_t i = 0; i < asset.data.size(); ++i)
+		srm::String str{ "" };
+		for (size_t i = 0; i < resource.data.size(); ++i)
 		{
-			str += asset.data[i];
+			str += resource.data[i];
 		}
-		ASU_CONSOLE_INFO(str);
-		//ASU_CONSOLE_VAR(str);
-		//ASU_VAR(str);
+		SRM_CONSOLE_INFO(str);
 	}
 
 	//if (asset)

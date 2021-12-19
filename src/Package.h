@@ -3,7 +3,7 @@
 #include "Common.h"
 #include "Entry.h"
 
-namespace Asu
+namespace srm
 {
 	void CreateEntryTable(EntryTable& table, const String& root, const Vec<String>& ignoreFiles = {});
 	void EntryTableFromFile(EntryTable& table, const String& path);

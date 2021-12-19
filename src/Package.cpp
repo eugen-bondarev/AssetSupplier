@@ -7,7 +7,7 @@
 #include <sstream>
 #include "Util.h"
 
-namespace Asu
+namespace srm
 {
 	static void AppendToEntryTable(
 		EntryTable& table, 
@@ -33,8 +33,7 @@ namespace Asu
 		}
 		else
 		{
-			//ASU_WARN("Skipping file: {0}", localPath);
-			ASU_CONSOLE_WARN("Skipping file: %s", localPath.c_str());
+			SRM_CONSOLE_WARN("Skipping file: %s", localPath.c_str());
 		}
 	}
 
@@ -70,8 +69,7 @@ namespace Asu
 
 	void CreateEntryTable(EntryTable& table, const String& root, const Vec<String>& ignoreFiles)
 	{
-		//ASU_INFO("Creating entry table: {0}", root);
-		ASU_CONSOLE_INFO("Creating entry table: %s", root.c_str());
+		SRM_CONSOLE_INFO("Creating entry table: %s", root.c_str());
 
 		size_t offset{ 0 };
 

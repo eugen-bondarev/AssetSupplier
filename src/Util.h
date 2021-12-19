@@ -2,7 +2,7 @@
 
 #include "Common.h"
 
-namespace Asu
+namespace srm
 {
 	namespace Util
 	{

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace Asu
+namespace srm
 {
 	void ConsoleOut(const String& message)
 	{

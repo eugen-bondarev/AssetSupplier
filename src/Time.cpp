@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace Asu
+namespace srm
 {
 	Time CastTime(const std::chrono::system_clock::duration duration)
 	{

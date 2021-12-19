@@ -2,10 +2,10 @@
 
 #include "Common.h"
 
-namespace Asu
+namespace srm
 {
 	// The entity that gets loaded by the library.
-	struct Asset
+	struct Resource
 	{
 		// Bytes.
 		Vec<char> data;

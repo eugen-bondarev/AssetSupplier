@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include "Common.h"
 
-namespace Asu
+namespace srm
 {
 	class Exception : public std::runtime_error
 	{

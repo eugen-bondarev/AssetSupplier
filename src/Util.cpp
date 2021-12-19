@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-namespace Asu
+namespace srm
 {
 	namespace Util
 	{

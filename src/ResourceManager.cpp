@@ -1,9 +1,9 @@
-#include "AssetSupplier.h"
+#include "ResourceManager.h"
 
 #include "FileChangeListener.h"
 #include "Exception.h"
 
-namespace Asu
+namespace srm
 {
 	// This gets initialized before using Asu (Setting up the formatting method).
 	struct Initializer
@@ -16,61 +16,66 @@ namespace Asu
 
 
 
-	void AssetSupplier::OnFlagCreate()
+	void ResourceManager::OnFlagCreate()
 	{
 		CreateEntryTable(table, root, ignoreFiles);
 		EntryTableToFile(root + "/" + tableFileName, table);
 		AssetsToFile(root + "/" + dataFileName, root, table);
 	}
 
-	void AssetSupplier::OnFlagNone()
+	void ResourceManager::OnFlagNone()
 	{
 		EntryTableFromFile(table, root + "/" + tableFileName);
 	}
 
-	AssetSupplier::AssetSupplier(
+	ResourceManager::ResourceManager(
 		const String& root, 
 		const String& tableFileName,
 		const String& dataFileName,
-		const AssetSupplierFlags flags
+		const Mode mode
 	) : root{ root }, tableFileName{ tableFileName }, dataFileName{ dataFileName }
 	{
 		ignoreFiles.resize(2);
 		ignoreFiles[0] = tableFileName;
 		ignoreFiles[1] = dataFileName;
 
-		if (flags & AssetSupplierFlags_Create)
+		switch (mode)
 		{
-			OnFlagCreate();
-		}
-		else
-		{
-			OnFlagNone();
-		}
-
-		if (flags & AssetSupplierFlags_Watch)
-		{
-			FW::FileWatcher watcher;
-			FileChangeListener listener{ root, watcher, *this };
-			watcher.addWatch(root, &listener, true);
-
-			// Todo: Make it in a separate thread.
-			while (true)
+			case Mode::Create:
 			{
-				watcher.update();
+				OnFlagCreate();
+				break;
+			}
+			case Mode::Default:
+			{
+				OnFlagNone();
+				break;
+			}
+			case Mode::Watch:
+			{
+				FW::FileWatcher watcher;
+				FileChangeListener listener{ root, watcher, *this };
+				watcher.addWatch(root, &listener, true);
+
+				// Todo: Make it in a separate thread.
+				while (true)
+				{
+					watcher.update();
+				}
+				break;
 			}
 		}
 	}
 
-	Asset AssetSupplier::Load(const String& location)
+	Resource ResourceManager::Load(const String& location)
 	{
-		Asset asset;
+		Resource asset;
 		const Entry& entry{ FindEntry(location) };
 		LoadAsset(asset, root + "/" + dataFileName, entry);
 		return asset;
 	}
 
-	bool AssetSupplier::IsFileIgnored(const String& fileName) const
+	bool ResourceManager::IsFileIgnored(const String& fileName) const
 	{
 		return std::find(
 			std::begin(ignoreFiles),
@@ -79,7 +84,7 @@ namespace Asu
 		) != std::end(ignoreFiles);
 	}
 
-	const Entry& AssetSupplier::FindEntry(const String& location)
+	const Entry& ResourceManager::FindEntry(const String& location)
 	{
 		for (size_t i = 0; i < table.size(); ++i)
 		{

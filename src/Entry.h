@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Resource.h"
 #include "Common.h"
-#include "Asset.h"
 
-namespace Asu
+namespace srm
 {
 	class Entry
 	{
@@ -28,5 +28,5 @@ namespace Asu
 
 	using EntryTable = Vec<Entry>;
 
-	void LoadAsset(Asset& asset, const String& archivePath, const Entry& entry);
+	void LoadAsset(Resource& resource, const String& archivePath, const Entry& entry);
 }

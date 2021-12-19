@@ -4,12 +4,11 @@
 #include <fstream>
 #include "Util.h"
 
-namespace Asu
+namespace srm
 {
 	Entry::Entry(const String& location, const size_t size, const size_t offset) : location{ location }, size{ size }, offset{ offset }
 	{
-		//ASU_INFO("File: {0}, size: {1} b, offset: {2} b", location, size, offset);
-		ASU_CONSOLE_INFO("File: %s, size: %i b, offset: %i b", location.c_str(), size, offset);
+		SRM_CONSOLE_INFO("File: %s, size: %i b, offset: %i b", location.c_str(), size, offset);
 	}
 
 	void Entry::SetLocation(const String& location)
@@ -47,12 +46,12 @@ namespace Asu
 		return offset;
 	}
 
-	void LoadAsset(Asset& asset, const String& archivePath, const Entry& entry)
+	void LoadAsset(Resource& resource, const String& archivePath, const Entry& entry)
 	{
-		asset.data.resize(entry.GetSize());
+		resource.data.resize(entry.GetSize());
 
 		std::ifstream inputStream{ archivePath, std::ios::binary };
 		inputStream.seekg(entry.GetOffset());
-		inputStream.read(asset.data.data(), entry.GetSize());
+		inputStream.read(resource.data.data(), entry.GetSize());
 	}
 }
