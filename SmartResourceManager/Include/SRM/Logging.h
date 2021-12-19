@@ -24,7 +24,7 @@ namespace srm
         return String(buf.get(), buf.get() + size - 1);
     }
 
-    void ConsoleOut(const String& message);
+    SRM_API void ConsoleOut(const String& message);
 }
 
 #define SRM_COLOR_ID_BLACK           "30"

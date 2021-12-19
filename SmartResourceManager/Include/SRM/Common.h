@@ -7,6 +7,8 @@
 #include <string>
 #include <map>
 
+#define SRM_API __declspec(dllexport)
+
 namespace srm
 {
 	template <typename T>

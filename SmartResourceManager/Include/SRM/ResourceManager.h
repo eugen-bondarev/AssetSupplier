@@ -9,7 +9,7 @@
 namespace srm
 {
 	// Helper class for the user.
-	class ResourceManager
+	class SRM_API ResourceManager
 	{
 		friend class FileChangeListener;
 
