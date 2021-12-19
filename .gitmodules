@@ -1,6 +1,0 @@
-[submodule "external/assimp"]
-	path = external/assimp
-	url = https://github.com/assimp/assimp
-[submodule "external/spdlog"]
-	path = external/spdlog
-	url = https://github.com/gabime/spdlog
