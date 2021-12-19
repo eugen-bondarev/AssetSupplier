@@ -20,5 +20,5 @@ target_include_directories(
 
 target_link_libraries(
 	SRM-Example
-	SmartResourceManager
+	SmartResourceManager_s
 )
