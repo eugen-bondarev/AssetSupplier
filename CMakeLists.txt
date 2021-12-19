@@ -17,21 +17,21 @@ file(
 	#external/FileWatcher/src/*.cpp
 )
 
-add_subdirectory(external/assimp)
-add_subdirectory(external/spdlog)
+# add_subdirectory(external/assimp)
+# add_subdirectory(external/spdlog)
 
 add_executable(AssetSupplier ${SOURCE_VAR})
 
 target_include_directories(
 	AssetSupplier 
 	PRIVATE 
-	external/assimp/include
-	external/spdlog/include
+	# external/assimp/include
+	# external/spdlog/include
 	src/External/FileWatcher/include
 )
 
 target_link_libraries(
 	AssetSupplier 
-	assimp
-	spdlog
+	# assimp
+	# spdlog
 )

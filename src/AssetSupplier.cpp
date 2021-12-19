@@ -10,7 +10,7 @@ namespace Asu
 	{
 		Initializer()
 		{
-			spdlog::set_pattern("[%^%l%$] %v");
+			//spdlog::set_pattern("[%^%l%$] %v");
 		}
 	} initializer;
 

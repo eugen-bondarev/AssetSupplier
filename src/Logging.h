@@ -27,7 +27,13 @@ namespace Asu
     void ConsoleOut(const String& message);
 }
 
+#define COLOR_GREEN_START "\x1B[32m"
+#define COLOR_RED_START "\x1B[31m"
+#define COLOR_YELLOW_START "\x1B[33m"
+
+#define COLOR_END "\033[0m"
+
 #define ASU_CONSOLE_OUT(...) ::Asu::ConsoleOut(::Asu::StringFormat(__VA_ARGS__))
-#define ASU_CONSOLE_INFO(...) ASU_CONSOLE_OUT("[Asu][Info] " __VA_ARGS__)
-#define ASU_CONSOLE_WARN(...) ASU_CONSOLE_OUT("[Asu][Warning] " __VA_ARGS__)
-#define ASU_CONSOLE_ERR(...) ASU_CONSOLE_OUT("[Asu][Error] " __VA_ARGS__)
+#define ASU_CONSOLE_INFO(...) ::Asu::ConsoleOut("[Asu][" COLOR_GREEN_START "Info" COLOR_END "] " + ::Asu::StringFormat(__VA_ARGS__))
+#define ASU_CONSOLE_WARN(...) ::Asu::ConsoleOut("[Asu][" COLOR_YELLOW_START "Warning" COLOR_END "] " + ::Asu::StringFormat(__VA_ARGS__))
+#define ASU_CONSOLE_ERR(...) ::Asu::ConsoleOut("[Asu][" COLOR_RED_START "Error" COLOR_END "] " + ::Asu::StringFormat(__VA_ARGS__))

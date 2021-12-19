@@ -1,6 +1,7 @@
 #include "FileChangeListener.h"
 
 #include "AssetSupplier.h"
+#include "Logging.h"
 
 namespace Asu
 {
@@ -23,7 +24,8 @@ namespace Asu
 		if (assetSupplier.IsFileIgnored(fileName)) return;
 
 		assetSupplier.OnFlagCreate();
-		ASU_INFO("{0}/{1}", directory, fileName);
+		//ASU_INFO("{0}/{1}", directory, fileName);
+		ASU_CONSOLE_INFO("%s/%s", directory.c_str(), fileName.c_str());
 	}
 #pragma warning(default: 26812)
 }

@@ -1,5 +1,6 @@
 #include "Entry.h"
 
+#include "Logging.h"
 #include <fstream>
 #include "Util.h"
 
@@ -7,7 +8,8 @@ namespace Asu
 {
 	Entry::Entry(const String& location, const size_t size, const size_t offset) : location{ location }, size{ size }, offset{ offset }
 	{
-		ASU_INFO("File: {0}, size: {1} b, offset: {2} b", location, size, offset);
+		//ASU_INFO("File: {0}, size: {1} b, offset: {2} b", location, size, offset);
+		ASU_CONSOLE_INFO("File: %s, size: %i b, offset: %i b", location.c_str(), size, offset);
 	}
 
 	void Entry::SetLocation(const String& location)
