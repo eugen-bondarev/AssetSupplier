@@ -14,13 +14,7 @@ add_compile_definitions(EXAMPLE_ROOT_DIR="${PROJECT_SOURCE_DIR}")
 
 add_executable(SRM-Example ${SOURCE_VAR})
 
-target_include_directories(
-	SRM-Example 
-	PRIVATE
-	../SmartResourceManager/Include
-)
-
 target_link_libraries(
 	SRM-Example
-	SmartResourceManager_s
+	SmartResourceManager
 )

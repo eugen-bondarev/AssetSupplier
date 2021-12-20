@@ -1,10 +1,58 @@
-#include <SRM/ResourceManager.h>
-#include <SRM/Exception.h>
-#include <SRM/Logging.h>
+#include <SRM/SRM.h>
 
 #ifndef EXAMPLE_ROOT_DIR
 #	define EXAMPLE_ROOT_DIR
 #endif
+
+namespace srm
+{
+	class ModelAsset
+	{
+	public:
+		ModelAsset(const srm::Resource& resource)
+		{
+		}
+	};
+
+	template <typename T>
+	class Cache
+	{
+	public:
+		using UserDefinedResource = T;
+		using Storage = Map<String, Ptr<UserDefinedResource>>;
+
+		Cache(ResourceManager& manager) 
+			: manager{ manager }
+		{
+		}
+
+		virtual ~Cache() = default;
+
+		const UserDefinedResource& Load(const String& path)
+		{
+			const Storage::const_iterator iterator = entities.find(path);
+
+			if (iterator != std::end(entities))
+			{
+				const UserDefinedResource& item{ *iterator->second };
+				return item;
+			}
+
+			const Resource resource{ manager.Load(path) };
+			UserDefinedResource* item{ new UserDefinedResource(resource) };
+			entities[path] = Ptr<UserDefinedResource>(item);
+			return *item;
+		}
+
+	protected:
+		ResourceManager& manager;
+		Storage entities;
+
+	private:
+		Cache(const Cache&) = delete;
+		Cache& operator=(const Cache&) = delete;
+	};
+}
 
 int main(const int argc, const char* argv[])
 {
@@ -12,6 +60,28 @@ int main(const int argc, const char* argv[])
 
 	srm::ResourceManager resourceManager{ root, "table.asu", "data.asu", srm::ResourceManager::Mode::Create };
 	srm::Resource resource;
+
+	struct MyModelAsset
+	{
+		MyModelAsset(const srm::Resource& resource)
+		{
+			SRM_CONSOLE_INFO("Calling constructor");
+		}
+	};
+
+	struct MyImageAsset
+	{
+		MyImageAsset(const srm::Resource& resource)
+		{
+			SRM_CONSOLE_INFO("Calling constructor");
+		}
+	};
+
+	srm::Cache<MyModelAsset> modelCache(resourceManager);
+	srm::Cache<MyImageAsset> imageCache(resourceManager);
+
+	const MyModelAsset& model0 = modelCache.Load("a/b/ddc");
+	const MyModelAsset& model1 = modelCache.Load("a/b/ddc");
 
 	try
 	{

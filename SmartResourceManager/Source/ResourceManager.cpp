@@ -5,17 +5,6 @@
 
 namespace srm
 {
-	// This gets initialized before using Asu (Setting up the formatting method).
-	struct Initializer
-	{
-		Initializer()
-		{
-			//spdlog::set_pattern("[%^%l%$] %v");
-		}
-	} initializer;
-
-
-
 	void ResourceManager::OnFlagCreate()
 	{
 		CreateEntryTable(table, root, ignoreFiles);
