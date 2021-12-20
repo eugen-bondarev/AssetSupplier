@@ -6,17 +6,6 @@
 #	define EXAMPLE_ROOT_DIR
 #endif
 
-namespace srm
-{
-	class ModelAsset
-	{
-	public:
-		ModelAsset(const srm::Resource& resource)
-		{
-		}
-	};
-}
-
 int main(const int argc, const char* argv[])
 {
 	const srm::String root{ EXAMPLE_ROOT_DIR "/Assets" };
@@ -24,33 +13,14 @@ int main(const int argc, const char* argv[])
 	srm::ResourceManager resourceManager{ root, "table.asu", "data.asu", srm::ResourceManager::Mode::Create };
 	srm::Resource resource;
 
-	//struct MyModelAsset
-	//{
-	//	MyModelAsset(const srm::Resource& resource)
-	//	{
-	//		SRM_CONSOLE_INFO("Calling constructor model");
-	//	}
-	//};
-
-	//struct MyImageAsset
-	//{
-	//	MyImageAsset(const srm::Resource& resource)
-	//	{
-	//		SRM_CONSOLE_INFO("Calling constructor image");
-	//	}
-	//};
-
-	//srm::Cache<MyModelAsset> modelCache(resourceManager);
-	//srm::Cache<MyImageAsset> imageCache(resourceManager);
-
-	//const MyModelAsset& model0 = modelCache.Load("a/b/ddc");
-	//const MyModelAsset& model1 = modelCache.Load("a/b/ddc");
+	//srm::Cache<ImageAsset> imageCache(resourceManager);
+	//const ImageAsset& imageAsset = imageCache.Load("CharacterTexture.png");
 	//const MyImageAsset& image0 = imageCache.Load("a/b/OtherShader.frag");
 	//const MyImageAsset& image1 = imageCache.Load("a/b/OtherShader.frag");
 
 	try
 	{
-		resource = resourceManager.Load("a/b/ddd");
+		resource = resourceManager.Load("a/c/e/Fa.vert");
 	}
 	catch (const srm::Exception& exception)
 	{

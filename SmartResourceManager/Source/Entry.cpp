@@ -1,12 +1,13 @@
 #include "Entry.h"
 
 #include "Logging.h"
-#include <fstream>
 #include "Util.h"
+
+#include <fstream>
 
 namespace srm
 {
-	Entry::Entry(const String& location, const size_t size, const size_t offset) : location{ location }, size{ size }, offset{ offset }
+	Entry::Entry(const String& location, const std::size_t size, const std::size_t offset) : location{ location }, size{ size }, offset{ offset }
 	{
 		SRM_CONSOLE_INFO("File: %s, size: %i b, offset: %i b", location.c_str(), size, offset);
 	}
@@ -53,16 +54,5 @@ namespace srm
 		std::ifstream inputStream{ archivePath, std::ios::binary };
 		inputStream.seekg(entry.GetOffset());
 		inputStream.read(resource.data.data(), entry.GetSize());
-	}
-
-
-	void LoadEntryList(const String& path)
-	{
-
-	}
-
-	void CreateEntryList(const String& root)
-	{
-
 	}
 }

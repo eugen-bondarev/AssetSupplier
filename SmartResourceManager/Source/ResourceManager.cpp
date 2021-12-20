@@ -12,110 +12,6 @@
 
 namespace srm
 {
-	static void AppendToEntryTable(
-		EntryTable& table,
-		const String& root,
-		const String& pathWithMessySlashes,
-		size_t& offset,
-		const Vec<String>& ignoreFiles
-	)
-	{
-		const String fullPath{ Util::ReplaceAll(pathWithMessySlashes, "\\", "/") };
-		const String localPath{ fullPath.substr(root.size() + 1, fullPath.size() - root.size()) };
-		const size_t size{ Util::GetFileSize(fullPath) };
-
-		const Entry entry{ localPath, size, offset };
-
-		const bool entryIgnored{ std::find(std::begin(ignoreFiles), std::end(ignoreFiles), entry.GetLocation()) != std::end(ignoreFiles) };
-
-		if (entry.GetSize() != 0 && !entryIgnored)
-		{
-			table.push_back(entry);
-			offset += size;
-		}
-		else
-		{
-			SRM_CONSOLE_WARN("Skipping file: %s", localPath.c_str());
-		}
-	}
-
-	static void SortAlphabetically(EntryTable& table)
-	{
-		std::sort(
-			std::begin(table),
-			std::end(table),
-			[&](const Entry& a, const Entry& b)
-			{
-				return a.GetLocation() < b.GetLocation();
-			}
-		);
-	}
-
-	void CreateEntryTable(EntryTable& table, const String& root, const Vec<String>& ignoreFiles)
-	{
-		SRM_CONSOLE_INFO("Creating entry table: %s", root.c_str());
-
-		size_t offset{ 0 };
-
-		table.clear();
-
-		for (const auto& entry : std::filesystem::recursive_directory_iterator(root))
-		{
-			if (!entry.is_directory())
-			{
-				AppendToEntryTable(table, root, entry.path().string(), offset, ignoreFiles);
-			}
-		}
-
-		// Now it's required to sort, since we want
-		// to perform binary search later on.
-		SortAlphabetically(table);
-	}
-
-	static void LineToEntry(Entry& entry, const String& line)
-	{
-		std::istringstream stringStream{ line };
-
-		String name{ "" };
-		size_t size{ 0 };
-		size_t offset{ 0 };
-
-		stringStream >> name >> size >> offset;
-
-		entry.SetLocation(name);
-		entry.SetSize(size);
-		entry.SetOffset(offset);
-	}
-
-	void EntryTableFromFile(EntryTable& table, const String& path)
-	{
-		std::ifstream inputStream{ path };
-		String line;
-
-		table.clear();
-
-		while (std::getline(inputStream, line))
-		{
-			Entry entry;
-			LineToEntry(entry, line);
-			table.push_back(entry);
-		}
-	}
-
-	void EntryTableToFile(const String& path, const EntryTable& table)
-	{
-		std::ofstream outputStream{ path };
-
-		for (size_t i = 0; i < table.size(); i++)
-		{
-			outputStream << table[i].GetLocation() << ' ' << table[i].GetSize() << ' ' << table[i].GetOffset();
-			if (i != table.size() - 1)
-			{
-				outputStream << '\n';
-			}
-		}
-	}
-
 	void AssetsToFile(const String& path, const String& pathPrefix, const EntryTable& table)
 	{
 		std::ofstream outputStream{ path, std::ios::binary };
@@ -123,38 +19,27 @@ namespace srm
 		EntryTable sorted{ table };
 
 		// We need to sort the table by offset before storing it.
-		std::sort(
-			std::begin(sorted),
-			std::end(sorted),
-			[](const Entry& a, const Entry& b)
-			{
-				return a.GetOffset() < b.GetOffset();
-			}
-		);
+		sorted.SortByOffset();
 
-		for (size_t i = 0; i < sorted.size(); ++i)
+		for (size_t i = 0; i < sorted.GetEntries().size(); ++i)
 		{
-			const String currentFileFullPath{ pathPrefix + "/" + sorted[i].GetLocation() };
+			const String currentFileFullPath{ pathPrefix + "/" + sorted.GetEntries()[i].GetLocation() };
 			std::ifstream currentFile{ currentFileFullPath, std::ios::binary };
 			outputStream << currentFile.rdbuf();
 		}
 	}
 
-
-
-
-
-
 	void ResourceManager::OnFlagCreate()
 	{
-		CreateEntryTable(table, root, ignoreFiles);
-		EntryTableToFile(root + "/" + tableFileName, table);
+		CreateEntryList(table, root, ignoreFiles);
+		table.ToFile(root + "/" + tableFileName);
+
 		AssetsToFile(root + "/" + dataFileName, root, table);
 	}
 
 	void ResourceManager::OnFlagNone()
 	{
-		EntryTableFromFile(table, root + "/" + tableFileName);
+		LoadEntryList(table, root + "/" + tableFileName);
 	}
 
 	ResourceManager::ResourceManager(
@@ -215,31 +100,24 @@ namespace srm
 
 	const Entry& ResourceManager::FindEntry(const String& location)
 	{
-		//for (size_t i = 0; i < table.size(); ++i)
-		//{
-		//	if (table[i].GetLocation() == location)
-		//	{
-		//		return table[i];
-		//	}
-		//}
-
+		// Binary search
 		const Entry copy{ location, 0, 0 };
 		const size_t index = static_cast<size_t>(std::lower_bound(
-			std::begin(table),
-			std::end(table),
+			std::begin(table.GetEntries()),
+			std::end(table.GetEntries()),
 			copy,
 			[](const Entry& a, const Entry& b)
 			{
 				return a.GetLocation() < b.GetLocation();
 			}
-		) - std::begin(table));
+		) - std::begin(table.GetEntries()));
 
 		if (index == Util::invalidIndex)
 		{
 			throw EntryNotFound(location);
-			return table[0];
+			return table.GetEntries()[0];
 		}
 
-		return table[index];
+		return table.GetEntries()[index];
 	}
 }

@@ -26,19 +26,5 @@ namespace srm
 		size_t offset{ 0 };
 	};
 
-	class EntryList
-	{
-		void LoadEntryList(const String& path);
-		void CreateEntryList(const String& root);
-
-	public:
-		EntryList();
-
-	private:
-		Vec<Entry> entries;
-	};
-
-	using EntryTable = Vec<Entry>;
-
 	void LoadAsset(Resource& resource, const String& archivePath, const Entry& entry);
 }
