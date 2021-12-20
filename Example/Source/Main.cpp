@@ -17,105 +17,8 @@ namespace srm
 	};
 }
 
-namespace srm
-{
-	bool CaseInsensitiveCompareLess(const String& a, const String& b)
-	{
-		return std::lexicographical_compare(
-			std::begin(a), std::end(a),
-			std::begin(b), std::end(b),
-			[](const char& aChar, const char& bChar)
-			{
-				return std::tolower(aChar) < std::tolower(bChar);
-			}
-		);
-	}
-
-	bool CaseInsensitiveCompareGreater(const String& a, const String& b)
-	{
-		return std::lexicographical_compare(
-			std::begin(a), std::end(a),
-			std::begin(b), std::end(b),
-			[](const char& aChar, const char& bChar)
-			{
-				return std::tolower(aChar) > std::tolower(bChar);
-			}
-		);
-	}
-
-	void Sort(Vec<String>& vector)
-	{
-		std::sort(
-			std::begin(vector),
-			std::end(vector),
-			[](const String& a, const String& b)
-			{
-				return CaseInsensitiveCompareLess(a, b);
-			}
-		);
-	}
-
-	size_t IndexOf(const Vec<String>& vector, const String& item)
-	{
-		size_t currentIndex{ vector.size() / 2 };
-
-		while (vector[currentIndex] != item)
-		{
-			SRM_CONSOLE_INFO("%i", currentIndex);
-
-			//const bool grt{ CaseInsensitiveCompareGreater(vector[currentIndex], item) };
-			//const bool lss{ CaseInsensitiveCompareLess(vector[currentIndex], item) };
-			const bool grt{ vector[currentIndex] < item };
-			const bool lss{ vector[currentIndex] > item };
-
-			if (grt)
-			{
-				currentIndex /= 2;
-				//const size_t change{ static_cast<size_t>(floorf(static_cast<float>(currentIndex) / 2)) };
-				//currentIndex -= change;
-			}
-			else if (lss)
-			{
-				const size_t change{ static_cast<size_t>(floorf(static_cast<float>(vector.size() - currentIndex) / 2)) };
-				currentIndex += change;
-			}
-		}
-
-		return currentIndex;
-	}
-
-	void Print(const Vec<String>& vector)
-	{
-		for (const String& item : vector)
-		{
-			SRM_CONSOLE_INFO(item);
-		}
-	}
-
-	void Test()
-	{
-		Vec<String> testVector = {
-			"a",
-			"aa",
-			"AA",
-			"aaB",
-			"aAB",
-			"Aab",
-			"ab",
-			"aBA",
-			"aBAA",
-		};
-
-		const size_t i{ IndexOf(testVector, testVector[8])};
-		SRM_CONSOLE_INFO("%i", i);
-	}
-}
-
 int main(const int argc, const char* argv[])
 {
-	//srm::Test();
-	//return 0;
-
 	const srm::String root{ EXAMPLE_ROOT_DIR "/Assets" };
 
 	srm::ResourceManager resourceManager{ root, "table.asu", "data.asu", srm::ResourceManager::Mode::Create };
@@ -147,7 +50,7 @@ int main(const int argc, const char* argv[])
 
 	try
 	{
-		resource = resourceManager.Load("a/c/e/ff");
+		resource = resourceManager.Load("a/b/ddd");
 	}
 	catch (const srm::Exception& exception)
 	{

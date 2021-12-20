@@ -54,4 +54,15 @@ namespace srm
 		inputStream.seekg(entry.GetOffset());
 		inputStream.read(resource.data.data(), entry.GetSize());
 	}
+
+
+	void LoadEntryList(const String& path)
+	{
+
+	}
+
+	void CreateEntryList(const String& root)
+	{
+
+	}
 }
