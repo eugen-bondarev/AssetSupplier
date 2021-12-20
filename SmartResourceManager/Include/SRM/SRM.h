@@ -4,3 +4,4 @@
 #include "Exception.h"
 #include "Logging.h"
 #include "Common.h"
+#include "Cache.h"

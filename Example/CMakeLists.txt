@@ -16,5 +16,5 @@ add_executable(SRM-Example ${SOURCE_VAR})
 
 target_link_libraries(
 	SRM-Example
-	SmartResourceManager
+	SmartResourceManager_s
 )

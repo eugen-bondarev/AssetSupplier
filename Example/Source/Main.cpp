@@ -1,5 +1,7 @@
 #include <SRM/SRM.h>
 
+#include <algorithm>
+
 #ifndef EXAMPLE_ROOT_DIR
 #	define EXAMPLE_ROOT_DIR
 #endif
@@ -13,49 +15,106 @@ namespace srm
 		{
 		}
 	};
+}
 
-	template <typename T>
-	class Cache
+namespace srm
+{
+	bool CaseInsensitiveCompareLess(const String& a, const String& b)
 	{
-	public:
-		using UserDefinedResource = T;
-		using Storage = Map<String, Ptr<UserDefinedResource>>;
-
-		Cache(ResourceManager& manager) 
-			: manager{ manager }
-		{
-		}
-
-		virtual ~Cache() = default;
-
-		const UserDefinedResource& Load(const String& path)
-		{
-			const Storage::const_iterator iterator = entities.find(path);
-
-			if (iterator != std::end(entities))
+		return std::lexicographical_compare(
+			std::begin(a), std::end(a),
+			std::begin(b), std::end(b),
+			[](const char& aChar, const char& bChar)
 			{
-				const UserDefinedResource& item{ *iterator->second };
-				return item;
+				return std::tolower(aChar) < std::tolower(bChar);
 			}
+		);
+	}
 
-			const Resource resource{ manager.Load(path) };
-			UserDefinedResource* item{ new UserDefinedResource(resource) };
-			entities[path] = Ptr<UserDefinedResource>(item);
-			return *item;
+	bool CaseInsensitiveCompareGreater(const String& a, const String& b)
+	{
+		return std::lexicographical_compare(
+			std::begin(a), std::end(a),
+			std::begin(b), std::end(b),
+			[](const char& aChar, const char& bChar)
+			{
+				return std::tolower(aChar) > std::tolower(bChar);
+			}
+		);
+	}
+
+	void Sort(Vec<String>& vector)
+	{
+		std::sort(
+			std::begin(vector),
+			std::end(vector),
+			[](const String& a, const String& b)
+			{
+				return CaseInsensitiveCompareLess(a, b);
+			}
+		);
+	}
+
+	size_t IndexOf(const Vec<String>& vector, const String& item)
+	{
+		size_t currentIndex{ vector.size() / 2 };
+
+		while (vector[currentIndex] != item)
+		{
+			SRM_CONSOLE_INFO("%i", currentIndex);
+
+			//const bool grt{ CaseInsensitiveCompareGreater(vector[currentIndex], item) };
+			//const bool lss{ CaseInsensitiveCompareLess(vector[currentIndex], item) };
+			const bool grt{ vector[currentIndex] > item };
+			const bool lss{ vector[currentIndex] < item };
+
+			if (grt)
+			{
+				const size_t change{ static_cast<size_t>(floorf(static_cast<float>(currentIndex) / 2)) };
+				currentIndex -= change;
+			}
+			else if (lss)
+			{
+				const size_t change{ static_cast<size_t>(floorf(static_cast<float>(vector.size() - currentIndex) / 2)) };
+				currentIndex += change;
+			}
 		}
 
-	protected:
-		ResourceManager& manager;
-		Storage entities;
+		return currentIndex;
+	}
 
-	private:
-		Cache(const Cache&) = delete;
-		Cache& operator=(const Cache&) = delete;
-	};
+	void Print(const Vec<String>& vector)
+	{
+		for (const String& item : vector)
+		{
+			SRM_CONSOLE_INFO(item);
+		}
+	}
+
+	void Test()
+	{
+		Vec<String> testVector = {
+			"a",
+			"aa",
+			"AA",
+			"aaB",
+			"aAB",
+			"Aab",
+			"ab",
+			"aBA",
+			"aBAA",
+		};
+
+		const size_t i{ IndexOf(testVector, testVector[2])};
+		SRM_CONSOLE_INFO("%i", i);
+	}
 }
 
 int main(const int argc, const char* argv[])
 {
+	srm::Test();
+	return 0;
+
 	const srm::String root{ EXAMPLE_ROOT_DIR "/Assets" };
 
 	srm::ResourceManager resourceManager{ root, "table.asu", "data.asu", srm::ResourceManager::Mode::Create };
@@ -65,7 +124,7 @@ int main(const int argc, const char* argv[])
 	{
 		MyModelAsset(const srm::Resource& resource)
 		{
-			SRM_CONSOLE_INFO("Calling constructor");
+			SRM_CONSOLE_INFO("Calling constructor model");
 		}
 	};
 
@@ -73,7 +132,7 @@ int main(const int argc, const char* argv[])
 	{
 		MyImageAsset(const srm::Resource& resource)
 		{
-			SRM_CONSOLE_INFO("Calling constructor");
+			SRM_CONSOLE_INFO("Calling constructor image");
 		}
 	};
 
@@ -82,6 +141,8 @@ int main(const int argc, const char* argv[])
 
 	const MyModelAsset& model0 = modelCache.Load("a/b/ddc");
 	const MyModelAsset& model1 = modelCache.Load("a/b/ddc");
+	const MyImageAsset& image0 = imageCache.Load("a/b/OtherShader.frag");
+	const MyImageAsset& image1 = imageCache.Load("a/b/OtherShader.frag");
 
 	try
 	{

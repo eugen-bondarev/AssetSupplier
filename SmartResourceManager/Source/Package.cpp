@@ -82,9 +82,11 @@ namespace srm
 				AppendToEntryTable(table, root, entry.path().string(), offset, ignoreFiles);
 			}
 		}
+#define ASU_SORT_ENTRY_TABLE
+#define ASU_ALLOW_CAPITAL_CASES
 
 #ifdef ASU_SORT_ENTRY_TABLE
-#	ifdef ASU_FORCE_ALLOW_CAPITAL_CASES
+#	ifdef ASU_ALLOW_CAPITAL_CASES
 		SortAlphabeticallyCaseInsensetive(table);
 #	else
 		SortAlphabetically(table);
