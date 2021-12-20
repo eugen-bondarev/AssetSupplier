@@ -18,7 +18,6 @@ namespace srm
 		Cache(ResourceManager& manager)
 			: manager{ manager }
 		{
-			Test();
 		}
 
 		virtual ~Cache() = default;

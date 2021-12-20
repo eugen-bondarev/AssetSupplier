@@ -65,13 +65,14 @@ namespace srm
 
 			//const bool grt{ CaseInsensitiveCompareGreater(vector[currentIndex], item) };
 			//const bool lss{ CaseInsensitiveCompareLess(vector[currentIndex], item) };
-			const bool grt{ vector[currentIndex] > item };
-			const bool lss{ vector[currentIndex] < item };
+			const bool grt{ vector[currentIndex] < item };
+			const bool lss{ vector[currentIndex] > item };
 
 			if (grt)
 			{
-				const size_t change{ static_cast<size_t>(floorf(static_cast<float>(currentIndex) / 2)) };
-				currentIndex -= change;
+				currentIndex /= 2;
+				//const size_t change{ static_cast<size_t>(floorf(static_cast<float>(currentIndex) / 2)) };
+				//currentIndex -= change;
 			}
 			else if (lss)
 			{
@@ -105,48 +106,48 @@ namespace srm
 			"aBAA",
 		};
 
-		const size_t i{ IndexOf(testVector, testVector[2])};
+		const size_t i{ IndexOf(testVector, testVector[8])};
 		SRM_CONSOLE_INFO("%i", i);
 	}
 }
 
 int main(const int argc, const char* argv[])
 {
-	srm::Test();
-	return 0;
+	//srm::Test();
+	//return 0;
 
 	const srm::String root{ EXAMPLE_ROOT_DIR "/Assets" };
 
 	srm::ResourceManager resourceManager{ root, "table.asu", "data.asu", srm::ResourceManager::Mode::Create };
 	srm::Resource resource;
 
-	struct MyModelAsset
-	{
-		MyModelAsset(const srm::Resource& resource)
-		{
-			SRM_CONSOLE_INFO("Calling constructor model");
-		}
-	};
+	//struct MyModelAsset
+	//{
+	//	MyModelAsset(const srm::Resource& resource)
+	//	{
+	//		SRM_CONSOLE_INFO("Calling constructor model");
+	//	}
+	//};
 
-	struct MyImageAsset
-	{
-		MyImageAsset(const srm::Resource& resource)
-		{
-			SRM_CONSOLE_INFO("Calling constructor image");
-		}
-	};
+	//struct MyImageAsset
+	//{
+	//	MyImageAsset(const srm::Resource& resource)
+	//	{
+	//		SRM_CONSOLE_INFO("Calling constructor image");
+	//	}
+	//};
 
-	srm::Cache<MyModelAsset> modelCache(resourceManager);
-	srm::Cache<MyImageAsset> imageCache(resourceManager);
+	//srm::Cache<MyModelAsset> modelCache(resourceManager);
+	//srm::Cache<MyImageAsset> imageCache(resourceManager);
 
-	const MyModelAsset& model0 = modelCache.Load("a/b/ddc");
-	const MyModelAsset& model1 = modelCache.Load("a/b/ddc");
-	const MyImageAsset& image0 = imageCache.Load("a/b/OtherShader.frag");
-	const MyImageAsset& image1 = imageCache.Load("a/b/OtherShader.frag");
+	//const MyModelAsset& model0 = modelCache.Load("a/b/ddc");
+	//const MyModelAsset& model1 = modelCache.Load("a/b/ddc");
+	//const MyImageAsset& image0 = imageCache.Load("a/b/OtherShader.frag");
+	//const MyImageAsset& image1 = imageCache.Load("a/b/OtherShader.frag");
 
 	try
 	{
-		resource = resourceManager.Load("a/b/ddc");
+		resource = resourceManager.Load("a/c/e/ff");
 	}
 	catch (const srm::Exception& exception)
 	{

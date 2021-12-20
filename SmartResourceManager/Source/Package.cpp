@@ -83,7 +83,7 @@ namespace srm
 			}
 		}
 #define ASU_SORT_ENTRY_TABLE
-#define ASU_ALLOW_CAPITAL_CASES
+//#define ASU_ALLOW_CAPITAL_CASES
 
 #ifdef ASU_SORT_ENTRY_TABLE
 #	ifdef ASU_ALLOW_CAPITAL_CASES
@@ -142,9 +142,19 @@ namespace srm
 	{
 		std::ofstream outputStream{ path, std::ios::binary };
 
-		for (size_t i = 0; i < table.size(); ++i)
+		EntryTable sorted = table;
+		std::sort(
+			std::begin(sorted),
+			std::end(sorted),
+			[](const Entry& a, const Entry& b)
+			{
+				return a.GetOffset() < b.GetOffset();
+			}
+		);
+
+		for (size_t i = 0; i < sorted.size(); ++i)
 		{
-			const String currentFileFullPath{ pathPrefix + "/" + table[i].GetLocation() };
+			const String currentFileFullPath{ pathPrefix + "/" + sorted[i].GetLocation() };
 			std::ifstream currentFile{ currentFileFullPath, std::ios::binary };
 			outputStream << currentFile.rdbuf();
 		}
