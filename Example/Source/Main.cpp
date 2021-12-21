@@ -19,7 +19,8 @@ int main(const int argc, const char* argv[])
 
 	try
 	{
-		resource = resourceManager.Load("a/b/c/d/e/deep-file.deep");
+		//resource = resourceManager.Load("a/b/c/d/e/deep-file.deep");
+		resource = resourceManager.Load("a/new-file.file");
 	}
 	catch (const srm::Exception& exception)
 	{
