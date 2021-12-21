@@ -1,7 +1,5 @@
 #include <SRM/SRM.h>
 
-#include <algorithm>
-
 #ifndef EXAMPLE_ROOT_DIR
 #	define EXAMPLE_ROOT_DIR
 #endif
@@ -10,13 +8,14 @@ int main(const int argc, const char* argv[])
 {
 	const srm::String root{ EXAMPLE_ROOT_DIR "/Assets" };
 
-	srm::ResourceManager resourceManager{ root, "table.asu", "data.asu", srm::ResourceManager::Mode::Create };
-	srm::Resource resource;
+	srm::ResourceManager resourceManager{ 
+		root, 
+		"table.asu", 
+		"data.asu", 
+		srm::ResourceManager::Mode::Create 
+	};
 
-	//srm::Cache<ImageAsset> imageCache(resourceManager);
-	//const ImageAsset& imageAsset = imageCache.Load("CharacterTexture.png");
-	//const MyImageAsset& image0 = imageCache.Load("a/b/OtherShader.frag");
-	//const MyImageAsset& image1 = imageCache.Load("a/b/OtherShader.frag");
+	srm::Resource resource;
 
 	try
 	{
