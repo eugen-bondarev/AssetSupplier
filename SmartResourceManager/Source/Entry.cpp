@@ -9,7 +9,12 @@ namespace srm
 {
 	Entry::Entry(const String& location, const std::size_t size, const std::size_t offset) : location{ location }, size{ size }, offset{ offset }
 	{
-		SRM_CONSOLE_INFO("File: %s, size: %i b, offset: %i b", location.c_str(), size, offset);
+		const bool isTemporaryEntry{ size == 0 };
+
+		if (!isTemporaryEntry)
+		{
+			SRM_CONSOLE_INFO("File: %s, size: %i b, offset: %i b", location.c_str(), size, offset);
+		}
 	}
 
 	void Entry::SetLocation(const String& location)

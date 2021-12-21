@@ -20,7 +20,7 @@ int main(const int argc, const char* argv[])
 
 	try
 	{
-		resource = resourceManager.Load("a/c/e/Fa.vert");
+		resource = resourceManager.Load("a/b/c/d/e/deep-file.deep");
 	}
 	catch (const srm::Exception& exception)
 	{

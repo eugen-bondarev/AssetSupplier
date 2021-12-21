@@ -28,7 +28,7 @@ namespace srm
 
 		size_t GetFileSize(const String& path)
 		{
-			std::ifstream fileStream(path, std::ifstream::ate | std::ifstream::binary);
+			std::ifstream fileStream{ path, std::ifstream::ate | std::ifstream::binary };
 			return fileStream.tellg();
 		}
 	}

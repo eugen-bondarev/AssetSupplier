@@ -18,8 +18,7 @@ namespace srm
 
 		template <typename T>
 		size_t BinarySearchIndexOf(const Vec<T>& vector, const T& item)
-		{
-			
+		{			
 			const size_t index{ static_cast<size_t>(std::lower_bound(
 				std::begin(vector),
 				std::begin(end),

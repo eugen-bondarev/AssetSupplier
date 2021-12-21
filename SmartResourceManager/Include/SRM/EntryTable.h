@@ -5,21 +5,32 @@
 
 namespace srm
 {
-	class EntryTable
+	class SRM_API EntryTable
 	{
-		friend void LoadEntryList(EntryTable& entryList, const String& path);
-		friend void CreateEntryList(EntryTable& entryList, const String& root, const Vec<String>& ignoreFiles);
+		friend class ResourceManager;
+
+		friend static void AppendToEntryTable(
+			EntryTable& table,
+			const String& root,
+			const String& pathWithMessySlashes,
+			size_t& offset,
+			const Vec<String>& ignoreFiles
+		);
 
 	public:
-		Vec<Entry>& GetEntries();
+		EntryTable() = default;
+		virtual ~EntryTable() = default;
 
-		void ToFile(const String& path);
+		void Load(const String& path);
+		void Create(const String& root, const Vec<String>& ignoreFiles);
 
-		void Sort();
+		void CreateTableFile(const String& path);
+		void CreateDataFile(const String& path, const String& pathPrefix);
 
+		void SortAlphabetically();
 		void SortByOffset();
 
-	private:
+	protected:
 		Vec<Entry> entries;
 	};
 }

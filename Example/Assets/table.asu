@@ -1,7 +1,9 @@
 a/b/!!! 66 0
-a/b/OtherShader.frag 60 266
-a/b/ddc 100 66
-a/b/ddd 100 166
-a/c/e/Fa.vert 34 327
-a/c/e/f 1 326
-a/c/e/ff 4 361
+a/b/OtherShader.frag 60 290
+a/b/c/d/e/deep-file.deep 24 66
+a/b/ddc 100 90
+a/b/ddd 100 190
+a/c/e/Fa.vert 34 351
+a/c/e/f 1 350
+a/c/e/ff 4 385
+a/new-file.file 1720 389

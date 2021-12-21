@@ -9,8 +9,6 @@
 
 namespace srm
 {
-	void AssetsToFile(const String& path, const String& pathPrefix, const EntryTable& entryList);
-
 	// Helper class for the user.
 	class SRM_API ResourceManager
 	{
@@ -34,11 +32,14 @@ namespace srm
 			const Mode mode = Mode::Default
 		);
 
+		virtual ~ResourceManager() = default;
+
 		bool IsFileIgnored(const String& fileName) const;
 
+		// This isn't cached by default, but you can set up a cache.
 		Resource Load(const String& location);
 
-	private:
+	protected:
 		void OnFlagCreate();
 		void OnFlagNone();
 
@@ -48,7 +49,7 @@ namespace srm
 		String dataFileName;
 
 		String root;
-		EntryTable table;
+		EntryTable entryTable;
 
 		Vec<String> ignoreFiles;
 	};

@@ -5,6 +5,8 @@
 #include <string>
 #include <memory>
 
+// Todo: Make this file standalone, save to a gist and reuse it.
+
 namespace srm
 {
     template<typename... Args>
@@ -52,11 +54,13 @@ namespace srm
 #define SRM_CONSOLE_OUT(...)\
     ::srm::ConsoleOut(::srm::StringFormat(__VA_ARGS__))
 
+#define SRM_LOGGING_PREFIX "[srm]"
+
 #define SRM_CONSOLE_INFO(...)\
-    ::srm::ConsoleOut("[Asu][" SRM_COLORED_STRING("Info", SRM_COLOR_ID_GREEN) "] " + ::srm::StringFormat(__VA_ARGS__))
+    ::srm::ConsoleOut(SRM_LOGGING_PREFIX "[" SRM_COLORED_STRING("Info", SRM_COLOR_ID_GREEN) "] " + ::srm::StringFormat(__VA_ARGS__))
 
 #define SRM_CONSOLE_WARN(...)\
-    ::srm::ConsoleOut("[Asu][" SRM_COLORED_STRING("Warning", SRM_COLOR_ID_YELLOW) "] " + ::srm::StringFormat(__VA_ARGS__))
+    ::srm::ConsoleOut(SRM_LOGGING_PREFIX "[" SRM_COLORED_STRING("Warning", SRM_COLOR_ID_YELLOW) "] " + ::srm::StringFormat(__VA_ARGS__))
 
 #define SRM_CONSOLE_ERR(...)\
-    ::srm::ConsoleOut("[Asu][" SRM_COLORED_STRING("Error", SRM_COLOR_ID_RED) "] " + ::srm::StringFormat(__VA_ARGS__))
+    ::srm::ConsoleOut(SRM_LOGGING_PREFIX "[" SRM_COLORED_STRING("Error", SRM_COLOR_ID_RED) "] " + ::srm::StringFormat(__VA_ARGS__))

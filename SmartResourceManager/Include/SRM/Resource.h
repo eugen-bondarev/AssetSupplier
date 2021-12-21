@@ -7,6 +7,9 @@ namespace srm
 	// The entity that gets loaded by the library.
 	struct SRM_API Resource
 	{
+		Resource() = default;
+		virtual ~Resource() = default;
+
 		// Bytes.
 		Vec<char> data;
 

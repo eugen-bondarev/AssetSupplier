@@ -12,34 +12,16 @@
 
 namespace srm
 {
-	void AssetsToFile(const String& path, const String& pathPrefix, const EntryTable& table)
-	{
-		std::ofstream outputStream{ path, std::ios::binary };
-
-		EntryTable sorted{ table };
-
-		// We need to sort the table by offset before storing it.
-		sorted.SortByOffset();
-
-		for (size_t i = 0; i < sorted.GetEntries().size(); ++i)
-		{
-			const String currentFileFullPath{ pathPrefix + "/" + sorted.GetEntries()[i].GetLocation() };
-			std::ifstream currentFile{ currentFileFullPath, std::ios::binary };
-			outputStream << currentFile.rdbuf();
-		}
-	}
-
 	void ResourceManager::OnFlagCreate()
 	{
-		CreateEntryList(table, root, ignoreFiles);
-		table.ToFile(root + "/" + tableFileName);
-
-		AssetsToFile(root + "/" + dataFileName, root, table);
+		entryTable.Create(root, ignoreFiles);
+		entryTable.CreateTableFile(root + "/" + tableFileName);
+		entryTable.CreateDataFile(root + "/" + dataFileName, root);
 	}
 
 	void ResourceManager::OnFlagNone()
 	{
-		LoadEntryList(table, root + "/" + tableFileName);
+		entryTable.Load(root + "/" + tableFileName);
 	}
 
 	ResourceManager::ResourceManager(
@@ -100,24 +82,27 @@ namespace srm
 
 	const Entry& ResourceManager::FindEntry(const String& location)
 	{
-		// Binary search
+		// Binary search.
 		const Entry copy{ location, 0, 0 };
-		const size_t index = static_cast<size_t>(std::lower_bound(
-			std::begin(table.GetEntries()),
-			std::end(table.GetEntries()),
+
+		auto it = std::lower_bound(
+			entryTable.entries.begin(),
+			entryTable.entries.end(),
 			copy,
-			[](const Entry& a, const Entry& b)
+			[](const Entry & a, const Entry & b)
 			{
 				return a.GetLocation() < b.GetLocation();
 			}
-		) - std::begin(table.GetEntries()));
+		);
 
-		if (index == Util::invalidIndex)
+		if (it->GetLocation() != location)
 		{
 			throw EntryNotFound(location);
-			return table.GetEntries()[0];
 		}
-
-		return table.GetEntries()[index];
+		else
+		{
+			const size_t index{ static_cast<size_t>(std::distance(entryTable.entries.begin(), it)) };
+			return entryTable.entries[index];
+		}
 	}
 }
